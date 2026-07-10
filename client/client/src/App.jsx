@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 
+
 // Auth pages
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
@@ -13,6 +14,9 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 // Protected route wrapper
 import ProtectedRoute from './components/common/ProtectedRoute';
 
+import InteractiveParkMap from './components/InteractiveParkMap';
+
+
 function App() {
   return (
     <Routes>
@@ -20,6 +24,16 @@ function App() {
       <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+
+      {/* My visitor map feature */}
+      <Route
+        path="/visitor/park-map"
+        element={
+          <ProtectedRoute allowedRoles={['visitor']}>
+            <InteractiveParkMap />
+          </ProtectedRoute>
+        }
+      />
 
       {/* Visitor routes */}
       <Route
@@ -50,10 +64,12 @@ function App() {
           </ProtectedRoute>
         }
       />
+      <Route path="/park-map-test" element={<InteractiveParkMap />} />
 
       {/* Fallback */}
       <Route path="*" element={<div><h1>404 — Page Not Found</h1></div>} />
     </Routes>
+
   );
 }
 

@@ -99,18 +99,29 @@ function GiftRecommendations({ checkInHistory }) {
       {loading ? (
         <p>Loading your wishlist...</p>
       ) : wishlist.length === 0 ? (
-        <p>No gift saved yet.</p>
+        <p className="wishlist-empty">
+          Nothing saved yet — check in to a zone and save a gift above.
+        </p>
       ) : (
-        <ul>
+        <div className="wishlist-list">
           {wishlist.map((item) => (
-            <li key={item.giftId}>
-              {item.name}{" "}
-              <button onClick={() => handleRemoveFromWishlist(item.giftId)}>
+            <div className="wishlist-card" key={item.giftId}>
+              <div className="wishlist-card-info">
+                <span className="wishlist-card-name">{item.name}</span>
+                {item.category && (
+                  <span className="wishlist-card-tag">{item.category}</span>
+                )}
+              </div>
+              <button
+                className="wishlist-remove-btn"
+                onClick={() => handleRemoveFromWishlist(item.giftId)}
+                aria-label={`Remove ${item.name} from wishlist`}
+              >
                 Remove
               </button>
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );

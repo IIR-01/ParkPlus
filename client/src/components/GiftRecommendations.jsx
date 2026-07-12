@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { giftItems } from "../data/parkData";
 import api from "../utils/api";
 
@@ -7,9 +7,16 @@ function GiftRecommendations({ checkInHistory }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const recommendedGifts = giftItems.filter((gift) =>
-    checkInHistory.includes(gift.linkedZone)
-  );
+  const recommendedGifts = useMemo(() => {
+    if (checkInHistory.length === 0) {
+      return [];
+    }
+
+    return giftItems.filter(
+      (gift) =>
+        gift.linkedZone === "Any" || checkInHistory.includes(gift.linkedZone)
+    );
+  }, [checkInHistory]);
 
   // Load the visitor's saved wishlist from the backend once, on mount
   useEffect(() => {
@@ -28,7 +35,7 @@ function GiftRecommendations({ checkInHistory }) {
   }, []);
 
   const handleAddToWishlist = async (gift) => {
-    const alreadySaved = wishlist.find((item) => item.giftId === gift.id);
+    const alreadySaved = wishlist.some((item) => item.giftId === gift.id);
     if (alreadySaved) return;
 
     try {
@@ -39,7 +46,7 @@ function GiftRecommendations({ checkInHistory }) {
         linkedZone: gift.linkedZone,
         linkedRide: gift.linkedRide,
       });
-      setWishlist([res.data.item, ...wishlist]);
+      setWishlist((currentWishlist) => [res.data.item, ...currentWishlist]);
     } catch (err) {
       setError("Couldn't save that gift. Try again.");
     }
@@ -48,82 +55,99 @@ function GiftRecommendations({ checkInHistory }) {
   const handleRemoveFromWishlist = async (giftId) => {
     try {
       await api.delete(`/wishlist/${giftId}`);
-      setWishlist(wishlist.filter((item) => item.giftId !== giftId));
+      setWishlist((currentWishlist) =>
+        currentWishlist.filter((item) => item.giftId !== giftId)
+      );
     } catch (err) {
       setError("Couldn't remove that gift. Try again.");
     }
   };
 
   return (
-    <div className="gift-section">
-      <h2>Recommended Gifts</h2>
+    <section className="gift-section">
+      <div className="section-heading">
+        <div>
+          <h2>Recommended Gifts</h2>
+          <p>Recommendations are based on the zones you have checked into.</p>
+        </div>
+
+        <span className="result-count">
+          {recommendedGifts.length} result
+          {recommendedGifts.length === 1 ? "" : "s"}
+        </span>
+      </div>
 
       {recommendedGifts.length === 0 ? (
-        <p>No recommendations yet. Check in to a zone first.</p>
+        <div className="empty-state">
+          <span className="empty-icon">🎁</span>
+          <p>No recommendations yet. Scan a park-zone QR code first.</p>
+        </div>
       ) : (
         <div className="gift-list">
           {recommendedGifts.map((gift) => {
             const isSaved = wishlist.some((item) => item.giftId === gift.id);
+
             return (
-              <div className="gift-card" key={gift.id}>
+              <article className="gift-card" key={gift.id}>
+                <div className="gift-card-top">
+                  <span className="category-tag">{gift.category}</span>
+                  <span className="gift-icon">🎁</span>
+                </div>
+
                 <h3>{gift.name}</h3>
 
                 <p>
-                  <strong>Category:</strong> {gift.category}
+                  <strong>Linked zone:</strong> {gift.linkedZone}
                 </p>
 
                 <p>
-                  <strong>Linked Zone:</strong> {gift.linkedZone}
-                </p>
-
-                <p>
-                  <strong>Linked Ride:</strong> {gift.linkedRide}
+                  <strong>Linked attraction:</strong> {gift.linkedRide}
                 </p>
 
                 <button
-                  onClick={() => handleAddToWishlist(gift)}
+                  type="button"
                   disabled={isSaved}
+                  onClick={() => handleAddToWishlist(gift)}
                 >
-                  {isSaved ? "Saved" : "Save to Wishlist"}
+                  {isSaved ? "Saved ✓" : "Save to Wishlist"}
                 </button>
-              </div>
+              </article>
             );
           })}
         </div>
       )}
 
-      <h2>My Wishlist</h2>
+      <div className="wishlist-section">
+        <h2>My Wishlist</h2>
 
-      {error && <p className="wishlist-error">{error}</p>}
+        {error && <p className="wishlist-error">{error}</p>}
 
-      {loading ? (
-        <p>Loading your wishlist...</p>
-      ) : wishlist.length === 0 ? (
-        <p className="wishlist-empty">
-          Nothing saved yet — check in to a zone and save a gift above.
-        </p>
-      ) : (
-        <div className="wishlist-list">
-          {wishlist.map((item) => (
-            <div className="wishlist-card" key={item.giftId}>
-              <div className="wishlist-card-info">
-                <span className="wishlist-card-name">{item.name}</span>
-                {item.category && (
-                  <span className="wishlist-card-tag">{item.category}</span>
-                )}
-              </div>
-              <button
-                className="wishlist-remove-btn"
-                onClick={() => handleRemoveFromWishlist(item.giftId)}
-                aria-label={`Remove ${item.name} from wishlist`}
-              >
-                Remove
-              </button>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
+        {loading ? (
+          <p>Loading your wishlist...</p>
+        ) : wishlist.length === 0 ? (
+          <p>No gifts saved yet.</p>
+        ) : (
+          <ul className="wishlist-list">
+            {wishlist.map((item) => (
+              <li key={item.giftId}>
+                <div>
+                  <strong>{item.name}</strong>
+                  <span>{item.category}</span>
+                </div>
+
+                <button
+                  type="button"
+                  className="remove-button"
+                  onClick={() => handleRemoveFromWishlist(item.giftId)}
+                >
+                  Remove
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </section>
   );
 }
 

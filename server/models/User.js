@@ -15,10 +15,6 @@ const UserSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-<<<<<<< HEAD
-=======
-// Hash password automatically before saving to database
->>>>>>> 278b129c5006a9d817db8f6ec7e6aa414f4b8be8
 UserSchema.pre('save', async function () {
   if (!this.isModified('password')) return;
   const salt = await bcrypt.genSalt(10);

@@ -9,8 +9,11 @@
     "test": "echo \"No test yet\""
   },
   "nodemonConfig": {
-  "ignore": ["node_modules","client"],
-  "ext": "js,json"
+    "ignore": [
+      "node_modules",
+      "client"
+    ],
+    "ext": "js,json"
   },
   "keywords": [],
   "author": "",
@@ -22,7 +25,8 @@
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
-    "mongoose": "^9.7.4"
+    "mongoose": "^9.7.4",
+    "qrcode": "^1.5.4"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"

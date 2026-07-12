@@ -40,10 +40,11 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// TODO: Add your routes here in Sprint 1
-// app.use('/api/auth', require('./routes/authRoutes'));
-// app.use('/api/tickets', require('./routes/ticketRoutes'));
-// app.use('/api/weather', require('./routes/weatherRoutes'));
+// Auth routes
+app.use('/api/auth', require('./routes/authRoutes'));
+
+// Ticket routes
+app.use('/api/tickets', require('./routes/ticketRoutes'));
 
 // ============================================================
 // 404 HANDLER — catches any route that doesn't exist

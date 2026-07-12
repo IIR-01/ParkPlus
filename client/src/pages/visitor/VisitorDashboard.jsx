@@ -61,7 +61,7 @@ const VisitorDashboard = () => {
     <div style={styles.page}>
       {/* Header */}
       <header style={styles.header}>
-        <h1 style={styles.headerLogo}>🎡 ParkPulse</h1>
+        <h1 style={styles.headerLogo}>🎡 ParkPlus</h1>
         <div style={styles.headerRight}>
           <span style={styles.headerUser}>Hello, {user?.name} 👋</span>
           <button onClick={handleLogout} style={styles.logoutBtn}>

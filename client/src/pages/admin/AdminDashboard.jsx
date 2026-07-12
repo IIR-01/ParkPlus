@@ -29,7 +29,7 @@ const AdminDashboard = () => {
   return (
     <div style={styles.page}>
       <header style={styles.header}>
-        <h1 style={styles.logo}>🎡 ParkPulse — Admin Portal</h1>
+        <h1 style={styles.logo}>🎡 ParkPlus — Admin Portal</h1>
         <div style={styles.headerRight}>
           <span style={styles.headerUser}>{user?.name} (Admin)</span>
           <button onClick={handleLogout} style={styles.logoutBtn}>Logout</button>

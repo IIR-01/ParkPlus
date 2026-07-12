@@ -47,7 +47,7 @@ const StaffDashboard = () => {
     <div style={styles.page}>
       {/* Header */}
       <header style={styles.header}>
-        <h1 style={styles.headerLogo}>🎡 ParkPulse — Staff Portal</h1>
+        <h1 style={styles.headerLogo}>🎡 ParkPlus — Staff Portal</h1>
         <div style={styles.headerRight}>
           <span style={styles.headerUser}>{user?.name}</span>
           <button onClick={handleLogout} style={styles.logoutBtn}>Logout</button>

@@ -240,6 +240,132 @@
   cursor: pointer;
 }
 
+.gift-card button:disabled {
+  background: #999;
+  cursor: not-allowed;
+}
+
+/* --- Gift card header row (category tag + icon) --- */
+.gift-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.category-tag {
+  font-size: 12px;
+  font-weight: 700;
+  color: #132b55;
+  background: #e2e8f0;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+.gift-icon {
+  font-size: 20px;
+}
+
+/* --- Section heading row (title + result count) --- */
+.section-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.section-heading h2 {
+  margin: 0 0 4px 0;
+}
+
+.section-heading p {
+  margin: 0;
+  color: #5a6b85;
+  font-size: 14px;
+}
+
+.result-count {
+  flex-shrink: 0;
+  background: #eef2f8;
+  color: #132b55;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 999px;
+}
+
+/* --- Empty state --- */
+.empty-state {
+  text-align: center;
+  padding: 30px 10px;
+  color: #5a6b85;
+}
+
+.empty-icon {
+  display: block;
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+/* --- Wishlist --- */
+.wishlist-section {
+  margin-top: 24px;
+}
+
+.wishlist-error {
+  color: #e63946;
+  font-weight: bold;
+}
+
+.wishlist-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.wishlist-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f4f8fb;
+  border-left: 4px solid #198754;
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+
+.wishlist-list li div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.wishlist-list li span {
+  font-size: 12px;
+  color: #555;
+  background: #e2e8f0;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.remove-button {
+  background: transparent;
+  color: #e63946;
+  border: 1px solid #e63946;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.remove-button:hover {
+  background: #e63946;
+  color: white;
+}
+
 @media (max-width: 900px) {
   .map-layout {
     grid-template-columns: 1fr;

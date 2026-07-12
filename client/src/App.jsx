@@ -64,7 +64,10 @@ function App() {
           </ProtectedRoute>
         }
       />
-      <Route path="/park-map-test" element={<InteractiveParkMap />} />
+      <Route 
+        path="/park-map-test" 
+        element={<InteractiveParkMap />} 
+      />
 
       {/* Fallback */}
       <Route path="*" element={<div><h1>404 — Page Not Found</h1></div>} />

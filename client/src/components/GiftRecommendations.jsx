@@ -1,18 +1,56 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { giftItems } from "../data/parkData";
+import api from "../utils/api";
 
 function GiftRecommendations({ checkInHistory }) {
   const [wishlist, setWishlist] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const recommendedGifts = giftItems.filter((gift) =>
     checkInHistory.includes(gift.linkedZone)
   );
 
-  const handleAddToWishlist = (gift) => {
-    const alreadySaved = wishlist.find((item) => item.id === gift.id);
+  // Load the visitor's saved wishlist from the backend once, on mount
+  useEffect(() => {
+    const fetchWishlist = async () => {
+      try {
+        const res = await api.get("/wishlist");
+        setWishlist(res.data);
+      } catch (err) {
+        setError("Couldn't load your wishlist. Try refreshing the page.");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    if (!alreadySaved) {
-      setWishlist([...wishlist, gift]);
+    fetchWishlist();
+  }, []);
+
+  const handleAddToWishlist = async (gift) => {
+    const alreadySaved = wishlist.find((item) => item.giftId === gift.id);
+    if (alreadySaved) return;
+
+    try {
+      const res = await api.post("/wishlist", {
+        giftId: gift.id,
+        name: gift.name,
+        category: gift.category,
+        linkedZone: gift.linkedZone,
+        linkedRide: gift.linkedRide,
+      });
+      setWishlist([res.data.item, ...wishlist]);
+    } catch (err) {
+      setError("Couldn't save that gift. Try again.");
+    }
+  };
+
+  const handleRemoveFromWishlist = async (giftId) => {
+    try {
+      await api.delete(`/wishlist/${giftId}`);
+      setWishlist(wishlist.filter((item) => item.giftId !== giftId));
+    } catch (err) {
+      setError("Couldn't remove that gift. Try again.");
     }
   };
 
@@ -24,38 +62,53 @@ function GiftRecommendations({ checkInHistory }) {
         <p>No recommendations yet. Check in to a zone first.</p>
       ) : (
         <div className="gift-list">
-          {recommendedGifts.map((gift) => (
-            <div className="gift-card" key={gift.id}>
-              <h3>{gift.name}</h3>
+          {recommendedGifts.map((gift) => {
+            const isSaved = wishlist.some((item) => item.giftId === gift.id);
+            return (
+              <div className="gift-card" key={gift.id}>
+                <h3>{gift.name}</h3>
 
-              <p>
-                <strong>Category:</strong> {gift.category}
-              </p>
+                <p>
+                  <strong>Category:</strong> {gift.category}
+                </p>
 
-              <p>
-                <strong>Linked Zone:</strong> {gift.linkedZone}
-              </p>
+                <p>
+                  <strong>Linked Zone:</strong> {gift.linkedZone}
+                </p>
 
-              <p>
-                <strong>Linked Ride:</strong> {gift.linkedRide}
-              </p>
+                <p>
+                  <strong>Linked Ride:</strong> {gift.linkedRide}
+                </p>
 
-              <button onClick={() => handleAddToWishlist(gift)}>
-                Save to Wishlist
-              </button>
-            </div>
-          ))}
+                <button
+                  onClick={() => handleAddToWishlist(gift)}
+                  disabled={isSaved}
+                >
+                  {isSaved ? "Saved" : "Save to Wishlist"}
+                </button>
+              </div>
+            );
+          })}
         </div>
       )}
 
       <h2>My Wishlist</h2>
 
-      {wishlist.length === 0 ? (
+      {error && <p className="wishlist-error">{error}</p>}
+
+      {loading ? (
+        <p>Loading your wishlist...</p>
+      ) : wishlist.length === 0 ? (
         <p>No gift saved yet.</p>
       ) : (
         <ul>
-          {wishlist.map((gift) => (
-            <li key={gift.id}>{gift.name}</li>
+          {wishlist.map((item) => (
+            <li key={item.giftId}>
+              {item.name}{" "}
+              <button onClick={() => handleRemoveFromWishlist(item.giftId)}>
+                Remove
+              </button>
+            </li>
           ))}
         </ul>
       )}

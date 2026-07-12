@@ -1,0 +1,382 @@
+.interactive-map-page {
+  max-width: 1250px;
+  margin: 0 auto;
+  padding: 30px 20px;
+  font-family: Arial, sans-serif;
+  color: #132b55;
+}
+
+.interactive-map-page h1 {
+  margin-bottom: 8px;
+  font-size: 36px;
+}
+
+.interactive-map-page > p {
+  margin-bottom: 22px;
+  font-size: 16px;
+}
+
+.map-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 28px;
+  align-items: start;
+}
+
+.park-map {
+  position: relative;
+  min-height: 620px;
+  border-radius: 24px;
+  overflow: hidden;
+  border: 2px solid #bfd3bc;
+  background:
+    linear-gradient(135deg, rgba(232, 204, 138, 0.55) 0%, rgba(232, 204, 138, 0.55) 8%, transparent 8%, transparent 100%),
+    linear-gradient(40deg, transparent 43%, rgba(232, 204, 138, 0.6) 43%, rgba(232, 204, 138, 0.6) 53%, transparent 53%),
+    linear-gradient(-45deg, transparent 46%, rgba(232, 204, 138, 0.55) 46%, rgba(232, 204, 138, 0.55) 56%, transparent 56%),
+    linear-gradient(135deg, #cfe7c7, #dceecb);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* Faint background decorations */
+.bg-item {
+  position: absolute;
+  opacity: 0.12;
+  z-index: 1;
+  pointer-events: none;
+  filter: blur(0.2px);
+}
+
+.bg-car {
+  left: 8%;
+  bottom: 12%;
+  font-size: 60px;
+}
+
+.bg-human {
+  right: 10%;
+  top: 18%;
+  font-size: 58px;
+}
+
+.bg-children {
+  left: 62%;
+  bottom: 18%;
+  font-size: 50px;
+}
+
+.bg-coaster {
+  left: 12%;
+  top: 10%;
+  font-size: 90px;
+}
+
+.bg-burger {
+  right: 18%;
+  bottom: 10%;
+  font-size: 70px;
+}
+
+.last-checkin-banner {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 5;
+  background: #1d7f45;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
+}
+
+.marker-wrapper {
+  position: absolute;
+  z-index: 4;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.map-marker {
+  width: 58px;
+  height: 58px;
+  border: 4px solid white;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.22);
+  transition: transform 0.2s ease;
+  z-index: 4;
+}
+
+.map-marker:hover {
+  transform: scale(1.12);
+}
+
+.map-marker.ride {
+  background: #ee4355;
+}
+
+.map-marker.water {
+  background: #31a8ff;
+}
+
+.map-marker.food {
+  background: #f39a00;
+}
+
+.map-marker.restroom {
+  background: #4285b4;
+}
+
+.map-marker.shop {
+  background: #7a58a6;
+}
+
+.checked-in-marker {
+  outline: 6px solid rgba(40, 167, 69, 0.35);
+}
+
+.marker-label {
+  margin-top: 7px;
+  background: rgba(255, 255, 255, 0.88);
+  padding: 4px 8px;
+  border-radius: 7px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.1);
+}
+
+.you-are-here {
+  margin-top: 5px;
+  background: #198754;
+  color: white;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.marker-details {
+  min-height: 620px;
+  padding: 28px;
+  border-radius: 24px;
+  border: 1px solid #d6dee8;
+  background: #f8f8f8;
+}
+
+.marker-details h2 {
+  margin-top: 0;
+  margin-bottom: 26px;
+  font-size: 28px;
+}
+
+.marker-details h3 {
+  margin-bottom: 24px;
+  font-size: 26px;
+}
+
+.marker-details p {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.checkin-button {
+  margin-top: 15px;
+  background: #198754;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 22px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.checkin-button:hover {
+  background: #146c43;
+}
+
+.check-in-section,
+.gift-section {
+  margin-top: 24px;
+  padding: 24px;
+  border-radius: 18px;
+  border: 1px solid #d6dee8;
+  background: white;
+}
+
+.check-in-section h2,
+.gift-section h2 {
+  margin-top: 0;
+}
+
+.gift-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+.gift-card {
+  padding: 16px;
+  border: 1px solid #d6dee8;
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
+.gift-card button {
+  margin-top: 10px;
+  background: #198754;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+.gift-card button:disabled {
+  background: #999;
+  cursor: not-allowed;
+}
+
+/* --- Gift card header row (category tag + icon) --- */
+.gift-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.category-tag {
+  font-size: 12px;
+  font-weight: 700;
+  color: #132b55;
+  background: #e2e8f0;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+.gift-icon {
+  font-size: 20px;
+}
+
+/* --- Section heading row (title + result count) --- */
+.section-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.section-heading h2 {
+  margin: 0 0 4px 0;
+}
+
+.section-heading p {
+  margin: 0;
+  color: #5a6b85;
+  font-size: 14px;
+}
+
+.result-count {
+  flex-shrink: 0;
+  background: #eef2f8;
+  color: #132b55;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 999px;
+}
+
+/* --- Empty state --- */
+.empty-state {
+  text-align: center;
+  padding: 30px 10px;
+  color: #5a6b85;
+}
+
+.empty-icon {
+  display: block;
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+/* --- Wishlist --- */
+.wishlist-section {
+  margin-top: 24px;
+}
+
+.wishlist-error {
+  color: #e63946;
+  font-weight: bold;
+}
+
+.wishlist-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.wishlist-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f4f8fb;
+  border-left: 4px solid #198754;
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+
+.wishlist-list li div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.wishlist-list li span {
+  font-size: 12px;
+  color: #555;
+  background: #e2e8f0;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.remove-button {
+  background: transparent;
+  color: #e63946;
+  border: 1px solid #e63946;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.remove-button:hover {
+  background: #e63946;
+  color: white;
+}
+
+@media (max-width: 900px) {
+  .map-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .park-map,
+  .marker-details {
+    min-height: auto;
+  }
+
+  .park-map {
+    min-height: 520px;
+  }
+}

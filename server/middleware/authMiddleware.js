@@ -1,11 +1,10 @@
-// Auth Middleware
-// Verifies JWT token and attaches user to req
-// TODO: Fill in Sprint 1
-
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
-// Verify the JWT token exists and is valid
+// -------------------------------------------------------
+// protect — verifies the JWT and attaches user to req
+// Use on any route that requires a logged-in user
+// -------------------------------------------------------
 const protect = async (req, res, next) => {
   let token;
 
@@ -14,26 +13,35 @@ const protect = async (req, res, next) => {
     req.headers.authorization.startsWith('Bearer')
   ) {
     try {
+      // Extract token from "Bearer <token>"
       token = req.headers.authorization.split(' ')[1];
+
+      // Verify the token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+      // Attach the user to the request (without the password)
       req.user = await User.findById(decoded.id).select('-password');
+
       next();
     } catch (error) {
-      res.status(401).json({ message: 'Not authorized, token failed' });
+      return res.status(401).json({ message: 'Not authorized — token is invalid or expired' });
     }
   }
 
   if (!token) {
-    res.status(401).json({ message: 'Not authorized, no token' });
+    return res.status(401).json({ message: 'Not authorized — no token provided' });
   }
 };
 
-// Restrict access to specific roles
+// -------------------------------------------------------
+// requireRole — restricts a route to specific roles
+// Usage: requireRole('staff', 'admin')
+// -------------------------------------------------------
 const requireRole = (...roles) => {
   return (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
+    if (!req.user || !roles.includes(req.user.role)) {
       return res.status(403).json({
-        message: `Role '${req.user.role}' is not allowed to access this route`,
+        message: `Access denied. This route is for: ${roles.join(', ')}`,
       });
     }
     next();

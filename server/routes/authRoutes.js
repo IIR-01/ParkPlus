@@ -1,22 +1,15 @@
 const express = require('express');
 const router = express.Router();
-
-// TODO Sprint 1: import authController
-// const { register, login, logout } = require('../controllers/authController');
+const { register, login, getMe } = require('../controllers/authController');
+const { protect } = require('../middleware/authMiddleware');
 
 // POST /api/auth/register
-router.post('/register', (req, res) => {
-  res.json({ message: 'Register route — coming in Sprint 1' });
-});
+router.post('/register', register);
 
 // POST /api/auth/login
-router.post('/login', (req, res) => {
-  res.json({ message: 'Login route — coming in Sprint 1' });
-});
+router.post('/login', login);
 
-// POST /api/auth/logout
-router.post('/logout', (req, res) => {
-  res.json({ message: 'Logout route — coming in Sprint 1' });
-});
+// GET /api/auth/me  (protected — needs JWT)
+router.get('/me', protect, getMe);
 
 module.exports = router;

@@ -1,126 +1,256 @@
-.page-container {
-  padding: 30px;
-  background-color: #f4f8fb;
-  min-height: 100vh;
+.interactive-map-page {
+  max-width: 1250px;
+  margin: 0 auto;
+  padding: 30px 20px;
   font-family: Arial, sans-serif;
+  color: #132b55;
 }
 
-.page-container h1 {
-  color: #1f3c88;
+.interactive-map-page h1 {
+  margin-bottom: 8px;
+  font-size: 36px;
 }
 
-.intro-text {
+.interactive-map-page > p {
+  margin-bottom: 22px;
   font-size: 16px;
-  margin-bottom: 20px;
 }
 
-.qr-section {
-  background: white;
-  padding: 15px;
-  border-radius: 10px;
-  margin-bottom: 20px;
+.map-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 28px;
+  align-items: start;
 }
 
-.qr-section button {
-  margin-right: 10px;
-  margin-bottom: 10px;
-  padding: 10px 14px;
-  border: none;
-  border-radius: 6px;
-  background-color: #1f3c88;
-  color: white;
-  cursor: pointer;
-}
-
-.last-zone {
-  background-color: #fff3cd;
-  padding: 12px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-}
-
-.map-box {
+.park-map {
   position: relative;
-  width: 100%;
-  height: 450px;
-  background: linear-gradient(135deg, #dff5d8, #bde0fe);
-  border: 3px solid #1f3c88;
-  border-radius: 15px;
-  margin-bottom: 25px;
+  min-height: 620px;
+  border-radius: 24px;
   overflow: hidden;
+  border: 2px solid #bfd3bc;
+  background:
+    linear-gradient(135deg, rgba(232, 204, 138, 0.55) 0%, rgba(232, 204, 138, 0.55) 8%, transparent 8%, transparent 100%),
+    linear-gradient(40deg, transparent 43%, rgba(232, 204, 138, 0.6) 43%, rgba(232, 204, 138, 0.6) 53%, transparent 53%),
+    linear-gradient(-45deg, transparent 46%, rgba(232, 204, 138, 0.55) 46%, rgba(232, 204, 138, 0.55) 56%, transparent 56%),
+    linear-gradient(135deg, #cfe7c7, #dceecb);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* Faint background decorations */
+.bg-item {
+  position: absolute;
+  opacity: 0.12;
+  z-index: 1;
+  pointer-events: none;
+  filter: blur(0.2px);
+}
+
+.bg-car {
+  left: 8%;
+  bottom: 12%;
+  font-size: 60px;
+}
+
+.bg-human {
+  right: 10%;
+  top: 18%;
+  font-size: 58px;
+}
+
+.bg-children {
+  left: 62%;
+  bottom: 18%;
+  font-size: 50px;
+}
+
+.bg-coaster {
+  left: 12%;
+  top: 10%;
+  font-size: 90px;
+}
+
+.bg-burger {
+  right: 18%;
+  bottom: 10%;
+  font-size: 70px;
+}
+
+.last-checkin-banner {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 5;
+  background: #1d7f45;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.15);
+}
+
+.marker-wrapper {
+  position: absolute;
+  z-index: 4;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .map-marker {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  padding: 8px 10px;
-  border-radius: 20px;
-  border: none;
-  color: white;
-  font-size: 12px;
+  width: 58px;
+  height: 58px;
+  border: 4px solid white;
+  border-radius: 50%;
   cursor: pointer;
-  text-transform: capitalize;
+  font-size: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.22);
+  transition: transform 0.2s ease;
+  z-index: 4;
 }
 
-.ride {
-  background-color: #e63946;
+.map-marker:hover {
+  transform: scale(1.12);
 }
 
-.food {
-  background-color: #f77f00;
+.map-marker.ride {
+  background: #ee4355;
 }
 
-.restroom {
-  background-color: #457b9d;
+.map-marker.water {
+  background: #31a8ff;
 }
 
-.shop {
-  background-color: #6a4c93;
+.map-marker.food {
+  background: #f39a00;
 }
 
-.visitor-zone {
-  position: absolute;
-  bottom: 15px;
-  left: 15px;
-  background: white;
-  padding: 10px;
-  border-radius: 8px;
-  font-weight: bold;
+.map-marker.restroom {
+  background: #4285b4;
 }
 
-.marker-card {
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  border-left: 6px solid #1f3c88;
-  margin-bottom: 25px;
+.map-marker.shop {
+  background: #7a58a6;
 }
 
-.marker-card button,
-.gift-card button {
-  padding: 8px 12px;
-  border: none;
-  background-color: #1f3c88;
+.checked-in-marker {
+  outline: 6px solid rgba(40, 167, 69, 0.35);
+}
+
+.marker-label {
+  margin-top: 7px;
+  background: rgba(255, 255, 255, 0.88);
+  padding: 4px 8px;
+  border-radius: 7px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.1);
+}
+
+.you-are-here {
+  margin-top: 5px;
+  background: #198754;
   color: white;
-  border-radius: 6px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.marker-details {
+  min-height: 620px;
+  padding: 28px;
+  border-radius: 24px;
+  border: 1px solid #d6dee8;
+  background: #f8f8f8;
+}
+
+.marker-details h2 {
+  margin-top: 0;
+  margin-bottom: 26px;
+  font-size: 28px;
+}
+
+.marker-details h3 {
+  margin-bottom: 24px;
+  font-size: 26px;
+}
+
+.marker-details p {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.checkin-button {
+  margin-top: 15px;
+  background: #198754;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 12px 22px;
+  font-size: 16px;
   cursor: pointer;
 }
 
+.checkin-button:hover {
+  background: #146c43;
+}
+
+.check-in-section,
 .gift-section {
+  margin-top: 24px;
+  padding: 24px;
+  border-radius: 18px;
+  border: 1px solid #d6dee8;
   background: white;
-  padding: 20px;
-  border-radius: 12px;
+}
+
+.check-in-section h2,
+.gift-section h2 {
+  margin-top: 0;
 }
 
 .gift-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 15px;
+  gap: 18px;
 }
 
 .gift-card {
-  border: 1px solid #ddd;
-  padding: 15px;
-  border-radius: 10px;
-  background-color: #fafafa;
+  padding: 16px;
+  border: 1px solid #d6dee8;
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
+.gift-card button {
+  margin-top: 10px;
+  background: #198754;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .map-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .park-map,
+  .marker-details {
+    min-height: auto;
+  }
+
+  .park-map {
+    min-height: 520px;
+  }
 }

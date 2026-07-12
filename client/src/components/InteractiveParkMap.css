@@ -124,3 +124,13 @@
   border-radius: 10px;
   background-color: #fafafa;
 }
+
+.wishlist-error {
+  color: #e63946;
+  font-weight: bold;
+}
+
+.gift-card button:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}

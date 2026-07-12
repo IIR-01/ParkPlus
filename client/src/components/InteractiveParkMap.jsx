@@ -3,79 +3,130 @@ import { parkMarkers } from "../data/parkData";
 import GiftRecommendations from "./GiftRecommendations";
 import "./InteractiveParkMap.css";
 
+const markerIcons = {
+  ride: "🎢",
+  water: "💦",
+  food: "🍔",
+  restroom: "🚻",
+  shop: "🎁",
+};
+
 function InteractiveParkMap() {
-  // Which marker is currently selected/open on the map
   const [selectedMarker, setSelectedMarker] = useState(null);
-
-  // Every zone the visitor has "checked in" to so far today.
-  // GiftRecommendations uses this to decide which gifts to suggest.
   const [checkInHistory, setCheckInHistory] = useState([]);
+  const [lastCheckedInZone, setLastCheckedInZone] = useState("");
 
-  const handleMarkerClick = (marker) => {
-    setSelectedMarker(marker);
-  };
+  const handleCheckIn = (marker) => {
+    setLastCheckedInZone(marker.zone);
 
-  const handleCheckIn = (zone) => {
-    // Avoid duplicate entries if the visitor checks into the same zone twice
-    if (!checkInHistory.includes(zone)) {
-      setCheckInHistory([...checkInHistory, zone]);
+    if (!checkInHistory.includes(marker.zone)) {
+      setCheckInHistory((prev) => [...prev, marker.zone]);
     }
   };
 
-  const lastZone = checkInHistory[checkInHistory.length - 1];
-
   return (
-    <div className="page-container">
+    <div className="interactive-map-page">
       <h1>Interactive Park Map</h1>
-      <p className="intro-text">
-        Tap a marker to see what's there, then check in to unlock gift
-        recommendations for that zone.
-      </p>
+      <p>Click a marker to view information and check in to that area.</p>
 
-      <div className="qr-section">
-        <p>Quick check-in:</p>
-        {parkMarkers.map((marker) => (
-          <button
-            key={marker.id}
-            onClick={() => handleCheckIn(marker.zone)}
-          >
-            {marker.zone}
-          </button>
-        ))}
+      <div className="map-layout">
+        <div className="park-map">
+          {/* Decorative faint background icons */}
+          <span className="bg-item bg-car">🚗</span>
+          <span className="bg-item bg-human">🚶</span>
+          <span className="bg-item bg-children">🧒👧</span>
+          <span className="bg-item bg-coaster">🎢</span>
+          <span className="bg-item bg-burger">🍔</span>
+
+          {lastCheckedInZone && (
+            <div className="last-checkin-banner">
+              Last Checked-In Zone: <strong>{lastCheckedInZone}</strong>
+            </div>
+          )}
+
+          {parkMarkers.map((marker) => {
+            const isCheckedIn = lastCheckedInZone === marker.zone;
+
+            return (
+              <div
+                key={marker.id}
+                className="marker-wrapper"
+                style={{
+                  left: `${marker.x}%`,
+                  top: `${marker.y}%`,
+                }}
+              >
+                <button
+                  type="button"
+                  className={`map-marker ${marker.type} ${
+                    isCheckedIn ? "checked-in-marker" : ""
+                  }`}
+                  title={marker.name}
+                  onClick={() => setSelectedMarker(marker)}
+                >
+                  <span>{markerIcons[marker.type]}</span>
+                </button>
+
+                <span className="marker-label">{marker.name}</span>
+
+                {isCheckedIn && (
+                  <span className="you-are-here">You are here</span>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="marker-details">
+          <h2>Location Details</h2>
+
+          {selectedMarker ? (
+            <>
+              <h3>{selectedMarker.name}</h3>
+
+              <p>
+                <strong>Type:</strong> {selectedMarker.type}
+              </p>
+
+              <p>
+                <strong>Zone:</strong> {selectedMarker.zone}
+              </p>
+
+              <p>
+                <strong>Restriction:</strong> {selectedMarker.restriction}
+              </p>
+
+              <p>
+                <strong>Status:</strong> {selectedMarker.status}
+              </p>
+
+              <button
+                className="checkin-button"
+                type="button"
+                onClick={() => handleCheckIn(selectedMarker)}
+              >
+                Check In to {selectedMarker.zone}
+              </button>
+            </>
+          ) : (
+            <p>Select a marker from the map.</p>
+          )}
+        </div>
       </div>
 
-      {lastZone && (
-        <div className="last-zone">
-          Last checked in: <strong>{lastZone}</strong>
-        </div>
-      )}
+      <div className="check-in-section">
+        <h2>Check-in History</h2>
 
-      <div className="map-box">
-        {parkMarkers.map((marker) => (
-          <button
-            key={marker.id}
-            className={`map-marker ${marker.type}`}
-            style={{ left: `${marker.x}%`, top: `${marker.y}%` }}
-            onClick={() => handleMarkerClick(marker)}
-          >
-            {marker.name}
-          </button>
-        ))}
-
-        {lastZone && <div className="visitor-zone">You are near: {lastZone}</div>}
+        {checkInHistory.length === 0 ? (
+          <p>No check-ins yet.</p>
+        ) : (
+          <ul>
+            {checkInHistory.map((zone) => (
+              <li key={zone}>{zone}</li>
+            ))}
+          </ul>
+        )}
       </div>
-
-      {selectedMarker && (
-        <div className="marker-card">
-          <h3>{selectedMarker.name}</h3>
-          <p><strong>Zone:</strong> {selectedMarker.zone}</p>
-          <p><strong>Status:</strong> {selectedMarker.status}</p>
-          <p><strong>Restriction:</strong> {selectedMarker.restriction}</p>
-          <button onClick={() => handleCheckIn(selectedMarker.zone)}>
-            Check in here
-          </button>
-        </div>
-      )}
 
       <GiftRecommendations checkInHistory={checkInHistory} />
     </div>

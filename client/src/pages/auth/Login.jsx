@@ -37,7 +37,7 @@ const Login = () => {
       <div style={styles.card}>
         <div style={styles.logoArea}>
           <span style={styles.logoIcon}>🎡</span>
-          <h1 style={styles.logoText}>ParkPulse</h1>
+          <h1 style={styles.logoText}>ParkPlus</h1>
         </div>
         <h2 style={styles.subtitle}>Sign In to Your Account</h2>
 

@@ -1,65 +1,135 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { giftItems } from "../data/parkData";
 
 function GiftRecommendations({ checkInHistory }) {
   const [wishlist, setWishlist] = useState([]);
 
-  const recommendedGifts = giftItems.filter((gift) =>
-    checkInHistory.includes(gift.linkedZone)
-  );
+  const recommendedGifts = useMemo(() => {
+    if (checkInHistory.length === 0) {
+      return [];
+    }
+
+    return giftItems.filter(
+      (gift) =>
+        gift.linkedZone === "Any" ||
+        checkInHistory.includes(gift.linkedZone)
+    );
+  }, [checkInHistory]);
 
   const handleAddToWishlist = (gift) => {
-    const alreadySaved = wishlist.find((item) => item.id === gift.id);
+    setWishlist((currentWishlist) => {
+      const alreadySaved = currentWishlist.some(
+        (item) => item.id === gift.id
+      );
 
-    if (!alreadySaved) {
-      setWishlist([...wishlist, gift]);
-    }
+      if (alreadySaved) {
+        return currentWishlist;
+      }
+
+      return [...currentWishlist, gift];
+    });
+  };
+
+  const handleRemoveFromWishlist = (giftId) => {
+    setWishlist((currentWishlist) =>
+      currentWishlist.filter((gift) => gift.id !== giftId)
+    );
   };
 
   return (
-    <div className="gift-section">
-      <h2>Recommended Gifts</h2>
+    <section className="gift-section">
+      <div className="section-heading">
+        <div>
+          <h2>Recommended Gifts</h2>
+          <p>
+            Recommendations are based on the zones you have checked into.
+          </p>
+        </div>
+
+        <span className="result-count">
+          {recommendedGifts.length} result
+          {recommendedGifts.length === 1 ? "" : "s"}
+        </span>
+      </div>
 
       {recommendedGifts.length === 0 ? (
-        <p>No recommendations yet. Check in to a zone first.</p>
+        <div className="empty-state">
+          <span className="empty-icon">🎁</span>
+          <p>
+            No recommendations yet. Scan a park-zone QR code first.
+          </p>
+        </div>
       ) : (
         <div className="gift-list">
-          {recommendedGifts.map((gift) => (
-            <div className="gift-card" key={gift.id}>
-              <h3>{gift.name}</h3>
+          {recommendedGifts.map((gift) => {
+            const isSaved = wishlist.some(
+              (item) => item.id === gift.id
+            );
 
-              <p>
-                <strong>Category:</strong> {gift.category}
-              </p>
+            return (
+              <article className="gift-card" key={gift.id}>
+                <div className="gift-card-top">
+                  <span className="category-tag">
+                    {gift.category}
+                  </span>
 
-              <p>
-                <strong>Linked Zone:</strong> {gift.linkedZone}
-              </p>
+                  <span className="gift-icon">🎁</span>
+                </div>
 
-              <p>
-                <strong>Linked Ride:</strong> {gift.linkedRide}
-              </p>
+                <h3>{gift.name}</h3>
 
-              <button onClick={() => handleAddToWishlist(gift)}>
-                Save to Wishlist
-              </button>
-            </div>
-          ))}
+                <p>
+                  <strong>Linked zone:</strong>{" "}
+                  {gift.linkedZone}
+                </p>
+
+                <p>
+                  <strong>Linked attraction:</strong>{" "}
+                  {gift.linkedRide}
+                </p>
+
+                <button
+                  type="button"
+                  disabled={isSaved}
+                  onClick={() => handleAddToWishlist(gift)}
+                >
+                  {isSaved ? "Saved ✓" : "Save to Wishlist"}
+                </button>
+              </article>
+            );
+          })}
         </div>
       )}
 
-      <h2>My Wishlist</h2>
+      <div className="wishlist-section">
+        <h2>My Wishlist</h2>
 
-      {wishlist.length === 0 ? (
-        <p>No gift saved yet.</p>
-      ) : (
-        <ul>
-          {wishlist.map((gift) => (
-            <li key={gift.id}>{gift.name}</li>
-          ))}
-        </ul>
-      )}
-    </div>
+        {wishlist.length === 0 ? (
+          <p>No gifts saved yet.</p>
+        ) : (
+          <ul className="wishlist-list">
+            {wishlist.map((gift) => (
+              <li key={gift.id}>
+                <div>
+                  <strong>{gift.name}</strong>
+                  <span>{gift.category}</span>
+                </div>
+
+                <button
+                  type="button"
+                  className="remove-button"
+                  onClick={() =>
+                    handleRemoveFromWishlist(gift.id)
+                  }
+                >
+                  Remove
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </section>
   );
 }
 

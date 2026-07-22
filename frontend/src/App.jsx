@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Link, Route, Routes } from "react-router-dom";
+import LiveWaitTimes from "./pages/LiveWaitTimes";
+import "./App.css";
 
-function App() {
+function StaffDashboard() {
   const [rides, setRides] = useState([]);
   const [rideId, setRideId] = useState("");
   const [waitTime, setWaitTime] = useState("");
@@ -28,61 +31,85 @@ function App() {
   };
 
   return (
-    <div style={{ padding: "40px", fontFamily: "Arial" }}>
-      <h1>ParkPlus Staff Dashboard</h1>
+    <main className="staff-dashboard">
+      <section className="staff-dashboard__card">
+        <p className="staff-dashboard__eyebrow">ParkPlus Staff Services</p>
+        <h1>ParkPlus Staff Dashboard</h1>
 
-      <h2>Update Ride Wait Time</h2>
+        <h2>Update Ride Wait Time</h2>
 
-      <select
-        value={rideId}
-        onChange={(e) => setRideId(e.target.value)}
-      >
-        <option value="">Select Ride</option>
+        <div className="staff-form">
+          <label>
+            Ride
+            <select
+              value={rideId}
+              onChange={(event) => setRideId(event.target.value)}
+            >
+              <option value="">Select Ride</option>
 
-        {rides.map((ride) => (
-          <option key={ride.id} value={ride.id}>
-            {ride.name}
-          </option>
-        ))}
-      </select>
+              {rides.map((ride) => (
+                <option key={ride.id} value={ride.id}>
+                  {ride.name}
+                </option>
+              ))}
+            </select>
+          </label>
 
-      <br /><br />
+          <label>
+            Wait time in minutes
+            <input
+              type="number"
+              min="0"
+              placeholder="Enter wait time"
+              value={waitTime}
+              onChange={(event) => setWaitTime(event.target.value)}
+            />
+          </label>
 
-      <input
-        type="number"
-        placeholder="Wait Time (minutes)"
-        value={waitTime}
-        onChange={(e) => setWaitTime(e.target.value)}
-      />
+          <button type="button" onClick={updateRide}>
+            Update Wait Time
+          </button>
+        </div>
 
-      <br /><br />
+        <h2>Current Ride Status</h2>
 
-      <button onClick={updateRide}>
-        Update Wait Time
-      </button>
+        <div className="staff-table-wrapper">
+          <table className="staff-table">
+            <thead>
+              <tr>
+                <th>Ride</th>
+                <th>Wait Time</th>
+              </tr>
+            </thead>
 
-      <hr />
+            <tbody>
+              {rides.map((ride) => (
+                <tr key={ride.id}>
+                  <td>{ride.name}</td>
+                  <td>{ride.waitTime} mins</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  );
+}
 
-      <h2>Current Ride Status</h2>
+function App() {
+  return (
+    <>
+      <nav className="app-nav">
+        <Link to="/">Staff Dashboard</Link>
+        <Link to="/live-wait-times">Visitor Live Wait Times</Link>
+      </nav>
 
-      <table border="1" cellPadding="10">
-        <thead>
-          <tr>
-            <th>Ride</th>
-            <th>Wait Time</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {rides.map((ride) => (
-            <tr key={ride.id}>
-              <td>{ride.name}</td>
-              <td>{ride.waitTime} mins</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+      <Routes>
+        <Route path="/" element={<StaffDashboard />} />
+        <Route path="/live-wait-times" element={<LiveWaitTimes />} />
+      </Routes>
+    </>
   );
 }
 

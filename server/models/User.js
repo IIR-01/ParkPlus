@@ -11,6 +11,10 @@ const UserSchema = new mongoose.Schema(
       enum: ['visitor', 'staff', 'admin'],
       default: 'visitor',
     },
+    points: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );

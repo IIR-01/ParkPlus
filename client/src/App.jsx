@@ -10,6 +10,7 @@ import Register from './pages/auth/Register';
 import VisitorDashboard from './pages/visitor/VisitorDashboard';
 import StaffDashboard from './pages/staff/StaffDashboard';
 import AdminDashboard from './pages/admin/AdminDashboard';
+import MyPoints from './pages/visitor/MyPoints';
 
 // Protected route wrapper
 import ProtectedRoute from './components/common/ProtectedRoute';
@@ -31,6 +32,16 @@ function App() {
         element={
           <ProtectedRoute allowedRoles={['visitor']}>
             <InteractiveParkMap />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* My points feature */}
+      <Route
+        path="/visitor/my-points"
+        element={
+          <ProtectedRoute allowedRoles={['visitor']}>
+            <MyPoints />
           </ProtectedRoute>
         }
       />

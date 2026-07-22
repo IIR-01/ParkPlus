@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../utils/api';
 
@@ -63,6 +63,9 @@ const VisitorDashboard = () => {
       <header style={styles.header}>
         <h1 style={styles.headerLogo}>🎡 ParkPlus</h1>
         <div style={styles.headerRight}>
+          <Link to="/visitor/my-points" style={styles.pointsLink}>
+            ⭐ My Points
+          </Link>
           <span style={styles.headerUser}>Hello, {user?.name} 👋</span>
           <button onClick={handleLogout} style={styles.logoutBtn}>
             Logout
@@ -166,6 +169,16 @@ const styles = {
   headerLogo: { margin: 0, fontSize: '1.4rem' },
   headerRight: { display: 'flex', alignItems: 'center', gap: '1rem' },
   headerUser: { fontSize: '0.95rem', opacity: 0.9 },
+  pointsLink: {
+    color: '#fff',
+    textDecoration: 'none',
+    fontSize: '0.875rem',
+    fontWeight: 600,
+    background: 'rgba(255,255,255,0.15)',
+    padding: '0.4rem 0.85rem',
+    borderRadius: '6px',
+    border: '1px solid rgba(255,255,255,0.3)',
+  },
   logoutBtn: {
     background: 'rgba(255,255,255,0.15)',
     color: '#fff',

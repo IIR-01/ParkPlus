@@ -48,6 +48,7 @@ app.use('/api/tickets', require('./routes/ticketRoutes'));
 
 // Wishlist routes
 app.use('/api/wishlist', require('./routes/wishlistRoutes'));
+app.use('/api/points', require('./routes/pointsRoutes'));
 
 // ============================================================
 // 404 HANDLER — catches any route that doesn't exist

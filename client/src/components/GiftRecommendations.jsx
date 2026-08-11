@@ -48,8 +48,11 @@ function GiftRecommendations({ checkInHistory }) {
       });
       setWishlist((currentWishlist) => [res.data.item, ...currentWishlist]);
     } catch (err) {
-      setError("Couldn't save that gift. Try again.");
-    }
+      console.error("Wishlist save error:", err.response?.data || err);
+      setError(
+        err.response?.data?.message || "Couldn't save that gift. Try again."
+      );
+   }
   };
 
   const handleRemoveFromWishlist = async (giftId) => {

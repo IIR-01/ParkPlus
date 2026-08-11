@@ -22,10 +22,10 @@ app.use(cors({
 }));
 
 // Parse incoming JSON request bodies
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 
 // Parse URL-encoded form data
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // ============================================================
 // ROUTES

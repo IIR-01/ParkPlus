@@ -7,9 +7,11 @@ const AdminDashboard = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [stats, setStats] = useState({ users: 0, tickets: 0 });
+  const [weather, setWeather] = useState(null);
 
   useEffect(() => {
     fetchBasicStats();
+    api.get('/weather').then(({ data }) => setWeather(data)).catch(() => setWeather(null));
   }, []);
 
   const fetchBasicStats = async () => {
@@ -39,7 +41,30 @@ const AdminDashboard = () => {
       <main style={styles.main}>
         <h2 style={styles.pageTitle}>Operations Overview</h2>
         <p style={styles.subtitle}>
-          Full admin dashboard coming in Sprint 4. Features being tracked:
+          {weather && (
+            <div style={{
+              background: weather.isAlert ? '#fef3c7' : '#f0fdf4',
+              border: `1.5px solid ${weather.isAlert ? '#fbbf24' : '#86efac'}`,
+              borderRadius: '12px',
+              padding: '1.1rem 1.4rem',
+              marginBottom: '1.5rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '1rem',
+            }}>
+              <span style={{ fontSize: '2rem' }}>{weather.isAlert ? '⛈️' : '☀️'}</span>
+              <div>
+                <p style={{ margin: 0, fontWeight: 700, color: '#1e293b' }}>
+                  Current Conditions: {weather.condition}{weather.temp ? ` · ${weather.temp}°C` : ''}
+                </p>
+                <p style={{ margin: '0.15rem 0 0', color: '#64748b', fontSize: '0.875rem' }}>
+                  {weather.isAlert
+                    ? 'Consider closing outdoor rides and directing visitors to indoor zones.'
+                    : 'Conditions are normal — no operational changes needed.'}
+                </p>
+              </div>
+            </div>
+          )}
         </p>
         <div style={styles.grid}>
           {[

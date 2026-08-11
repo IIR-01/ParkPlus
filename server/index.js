@@ -46,6 +46,12 @@ app.use('/api/auth', require('./routes/authRoutes'));
 // Ticket routes
 app.use('/api/tickets', require('./routes/ticketRoutes'));
 
+// Weather routes
+app.use('/api/weather', require('./routes/weatherRoutes'));
+
+// Lost child routes
+app.use('/api/lostchild', require('./routes/lostChildRoutes'));
+
 // Wishlist routes
 app.use('/api/wishlist', require('./routes/wishlistRoutes'));
 app.use('/api/points', require('./routes/pointsRoutes'));

@@ -40,7 +40,6 @@ const AdminDashboard = () => {
 
       <main style={styles.main}>
         <h2 style={styles.pageTitle}>Operations Overview</h2>
-        <p style={styles.subtitle}>
           {weather && (
             <div style={{
               background: weather.isAlert ? '#fef3c7' : '#f0fdf4',
@@ -65,7 +64,6 @@ const AdminDashboard = () => {
               </div>
             </div>
           )}
-        </p>
         <div style={styles.grid}>
           {[
             { icon: '🎟️', label: 'Entry Ticketing', status: 'Live (Sprint 1)', color: '#dcfce7', border: '#86efac' },

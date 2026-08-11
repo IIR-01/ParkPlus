@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import WeatherBanner from '../../components/common/WeatherBanner';
 import api from '../../utils/api';
+import LostChildModal from '../../components/common/LostChildModal';
 
 const VisitorDashboard = () => {
   const { user, logout } = useAuth();
@@ -11,6 +13,7 @@ const VisitorDashboard = () => {
   const [generating, setGenerating] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const [showLostChildModal, setShowLostChildModal] = useState(false);
 
   // Fetch visitor's existing ticket on load
   useEffect(() => {
@@ -70,11 +73,15 @@ const VisitorDashboard = () => {
           <button onClick={handleLogout} style={styles.logoutBtn}>
             Logout
           </button>
+          <button onClick={() => setShowLostChildModal(true)} style={{ background: '#dc2626', color: '#fff', border: 'none', padding: '0.5rem 1rem', borderRadius: '8px', cursor: 'pointer', fontWeight: 600 }}>
+            🚨 Report Lost Child
+          </button>
         </div>
       </header>
 
       {/* Main content */}
       <main style={styles.main}>
+        <WeatherBanner />
         <h2 style={styles.pageTitle}>My Entry Ticket</h2>
 
         {message && <div style={styles.successMsg}>{message}</div>}
@@ -150,9 +157,18 @@ const VisitorDashboard = () => {
           </div>
         )}
       </main>
+      {showLostChildModal && (
+        <LostChildModal
+          onClose={() => setShowLostChildModal(false)}
+          onSubmitted={() => {
+            setShowLostChildModal(false);
+            alert('✅ Lost child report submitted. Park staff will be notified.');
+          }}
+        />
+      )}
     </div>
   );
-};
+}
 
 const styles = {
   page: { minHeight: '100vh', background: '#f0f4ff' },

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import LostChildAlertPanel from '../../components/common/LostChildAlertPanel';
 import api from '../../utils/api';
 
 const StaffDashboard = () => {
@@ -55,6 +56,7 @@ const StaffDashboard = () => {
       </header>
 
       <main style={styles.main}>
+        <LostChildAlertPanel />
         <div style={styles.grid}>
           {/* Left — validation form */}
           <div>

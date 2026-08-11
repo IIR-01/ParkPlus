@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const { getWeather } = require('../controllers/weatherController');
+const { protect } = require('../middleware/authMiddleware');
 
 // GET /api/weather
-router.get('/', (req, res) => {
-  res.json({ message: 'Weather route — coming in Sprint 1' });
-});
+router.get('/', protect, getWeather);
 
 module.exports = router;

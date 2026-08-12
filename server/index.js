@@ -56,6 +56,9 @@ app.use('/api/lostchild', require('./routes/lostChildRoutes'));
 app.use('/api/wishlist', require('./routes/wishlistRoutes'));
 app.use('/api/points', require('./routes/pointsRoutes'));
 
+// Visitor QR check-in history routes
+app.use('/api/checkins', require('./routes/checkInRoutes'));
+
 // ============================================================
 // 404 HANDLER — catches any route that doesn't exist
 // ============================================================

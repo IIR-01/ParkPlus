@@ -11,6 +11,8 @@ import VisitorDashboard from './pages/visitor/VisitorDashboard';
 import StaffDashboard from './pages/staff/StaffDashboard';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import MyPoints from './pages/visitor/MyPoints';
+import LiveWaitTimes from './pages/visitor/LiveWaitTimes';
+import RideWaitManagement from './pages/staff/RideWaitManagement';
 
 // Protected route wrapper
 import ProtectedRoute from './components/common/ProtectedRoute';
@@ -46,6 +48,21 @@ function App() {
         }
       />
 
+
+
+
+
+
+
+      <Route
+        path="/visitor/live-wait-times"
+        element={
+          <ProtectedRoute allowedRoles={['visitor']}>
+            <LiveWaitTimes />
+          </ProtectedRoute>
+        }
+      />
+
       {/* Visitor routes */}
       <Route
         path="/visitor/*"
@@ -55,6 +72,22 @@ function App() {
           </ProtectedRoute>
         }
       />
+
+      <Route
+        path="/staff/ride-wait-times"
+        element={
+          <ProtectedRoute allowedRoles={['staff']}>
+            <RideWaitManagement />
+          </ProtectedRoute>
+        }
+      />
+
+
+
+
+
+
+
 
       {/* Staff routes */}
       <Route
@@ -75,9 +108,9 @@ function App() {
           </ProtectedRoute>
         }
       />
-      <Route 
-        path="/park-map-test" 
-        element={<InteractiveParkMap />} 
+      <Route
+        path="/park-map-test"
+        element={<InteractiveParkMap />}
       />
 
       {/* Fallback */}

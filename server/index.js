@@ -45,6 +45,8 @@ app.use('/api/auth', require('./routes/authRoutes'));
 
 // Ticket routes
 app.use('/api/tickets', require('./routes/ticketRoutes'));
+// Ride routes
+app.use('/api/rides', require('./routes/rideRoutes'));
 
 // Weather routes
 app.use('/api/weather', require('./routes/weatherRoutes'));

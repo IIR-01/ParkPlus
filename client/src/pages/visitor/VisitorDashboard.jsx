@@ -73,7 +73,9 @@ const VisitorDashboard = () => {
           <Link to="/visitor/park-map" style={styles.pointsLink}>
             🗺️ Park Map
           </Link>
-
+          <Link to="/visitor/live-wait-times" style={styles.pointsLink}>
+            🎢 Live Wait Times
+          </Link>
           <span style={styles.headerUser}>Hello, {user?.name} 👋</span>
           <button onClick={handleLogout} style={styles.logoutBtn}>
             Logout

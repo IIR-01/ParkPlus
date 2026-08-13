@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import LostChildAlertPanel from '../../components/common/LostChildAlertPanel';
 import api from '../../utils/api';
@@ -50,6 +50,9 @@ const StaffDashboard = () => {
       <header style={styles.header}>
         <h1 style={styles.headerLogo}>🎡 ParkPlus — Staff Portal</h1>
         <div style={styles.headerRight}>
+          <Link to="/staff/ride-wait-times" style={styles.rideLink}>
+            🎢 Ride Wait Times
+          </Link>
           <span style={styles.headerUser}>{user?.name}</span>
           <button onClick={handleLogout} style={styles.logoutBtn}>Logout</button>
         </div>
@@ -149,6 +152,16 @@ const styles = {
   },
   headerLogo: { margin: 0, fontSize: '1.3rem' },
   headerRight: { display: 'flex', alignItems: 'center', gap: '1rem' },
+  rideLink: {
+    color: '#fff',
+    textDecoration: 'none',
+    fontSize: '0.875rem',
+    fontWeight: 600,
+    background: 'rgba(255,255,255,0.15)',
+    padding: '0.4rem 0.85rem',
+    borderRadius: '6px',
+    border: '1px solid rgba(255,255,255,0.3)',
+  },
   headerUser: { fontSize: '0.95rem', opacity: 0.9 },
   logoutBtn: {
     background: 'rgba(255,255,255,0.15)',

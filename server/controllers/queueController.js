@@ -1,9 +1,23 @@
 const QueueReservation = require('../models/QueueReservation');
 const Ride = require('../models/Ride');
+const expireOldReservations = async () => {
+  const now = new Date();
+
+  await QueueReservation.updateMany(
+    {
+      status: 'active',
+      returnTimeEnd: { $lt: now },
+    },
+    {
+      $set: { status: 'expired' },
+    }
+  );
+};
 
 // Create a virtual queue reservation
 const createReservation = async (req, res) => {
   try {
+    await expireOldReservations();
     const { rideId } = req.body;
 
     if (!rideId) {
@@ -68,6 +82,7 @@ const createReservation = async (req, res) => {
 // Get logged-in visitor's reservations
 const getMyReservations = async (req, res) => {
   try {
+    await expireOldReservations();
     const reservations = await QueueReservation.find({
       visitor: req.user._id,
     })

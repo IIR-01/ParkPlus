@@ -29,7 +29,19 @@ const createReservation = async (req, res) => {
     const returnTimeEnd = new Date(
       returnTimeStart.getTime() + 15 * 60 * 1000
     );
+    const overlappingReservation = await QueueReservation.findOne({
+      visitor: req.user._id,
+      status: 'active',
+      returnTimeStart: { $lt: returnTimeEnd },
+      returnTimeEnd: { $gt: returnTimeStart },
+    });
 
+    if (overlappingReservation) {
+      return res.status(409).json({
+        message:
+          'You already have an active reservation that overlaps with this return time.',
+      });
+    }
     const reservation = await QueueReservation.create({
       visitor: req.user._id,
       ride: ride._id,

@@ -12,6 +12,7 @@ import StaffDashboard from './pages/staff/StaffDashboard';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import MyPoints from './pages/visitor/MyPoints';
 import LiveWaitTimes from './pages/visitor/LiveWaitTimes';
+import MyReservations from './pages/visitor/MyReservations';
 import RideWaitManagement from './pages/staff/RideWaitManagement';
 
 // Protected route wrapper
@@ -59,6 +60,14 @@ function App() {
         element={
           <ProtectedRoute allowedRoles={['visitor']}>
             <LiveWaitTimes />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/visitor/my-reservations"
+        element={
+          <ProtectedRoute allowedRoles={['visitor']}>
+            <MyReservations />
           </ProtectedRoute>
         }
       />

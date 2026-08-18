@@ -62,6 +62,9 @@ app.use('/api/points', require('./routes/pointsRoutes'));
 // Visitor QR check-in history routes
 app.use('/api/checkins', require('./routes/checkInRoutes'));
 
+// Admin dashboard routes
+app.use('/api/admin', require('./routes/adminRoutes'));
+
 // ============================================================
 // 404 HANDLER — catches any route that doesn't exist
 // ============================================================

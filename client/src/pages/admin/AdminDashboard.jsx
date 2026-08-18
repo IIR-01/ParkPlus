@@ -3,25 +3,38 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../utils/api';
 
+const REFRESH_INTERVAL_MS = 15000;
+const DEFAULT_THRESHOLD = 30;
+
 const AdminDashboard = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const [stats, setStats] = useState({ users: 0, tickets: 0 });
   const [weather, setWeather] = useState(null);
+  const [dashboard, setDashboard] = useState(null);
+  const [dashboardError, setDashboardError] = useState('');
+  const [threshold, setThreshold] = useState(DEFAULT_THRESHOLD);
+
+  const fetchDashboard = async (thresholdValue) => {
+    try {
+      const { data } = await api.get('/admin/dashboard', {
+        params: { threshold: thresholdValue },
+      });
+      setDashboard(data);
+      setDashboardError('');
+    } catch (err) {
+      setDashboardError(err.response?.data?.message || 'Failed to load dashboard stats');
+    }
+  };
 
   useEffect(() => {
-    fetchBasicStats();
     api.get('/weather').then(({ data }) => setWeather(data)).catch(() => setWeather(null));
   }, []);
 
-  const fetchBasicStats = async () => {
-    try {
-      const { data } = await api.get('/auth/me');
-      // Just confirms the admin is logged in — full stats come in Sprint 4
-    } catch (err) {
-      // Silent fail for now
-    }
-  };
+  useEffect(() => {
+    fetchDashboard(threshold);
+    const interval = setInterval(() => fetchDashboard(threshold), REFRESH_INTERVAL_MS);
+    return () => clearInterval(interval);
+  }, [threshold]);
 
   const handleLogout = () => {
     logout();
@@ -40,6 +53,66 @@ const AdminDashboard = () => {
 
       <main style={styles.main}>
         <h2 style={styles.pageTitle}>Operations Overview</h2>
+
+        {dashboardError && <div style={styles.error}>{dashboardError}</div>}
+
+        <div style={styles.statsGrid}>
+          <div style={styles.statCard}>
+            <span style={styles.statIcon}>🧑‍🤝‍🧑</span>
+            <div>
+              <p style={styles.statValue}>{dashboard ? dashboard.checkedInVisitors : '—'}</p>
+              <p style={styles.statLabel}>Checked-In Visitors</p>
+            </div>
+          </div>
+
+          <div style={{
+            ...styles.statCard,
+            ...(dashboard?.openAlerts > 0 ? styles.statCardAlert : {}),
+          }}>
+            <span style={styles.statIcon}>🚨</span>
+            <div>
+              <p style={styles.statValue}>{dashboard ? dashboard.openAlerts : '—'}</p>
+              <p style={styles.statLabel}>Open Lost-Child Alerts</p>
+            </div>
+          </div>
+
+          <div style={{
+            ...styles.statCard,
+            ...(dashboard?.ridesOverThresholdCount > 0 ? styles.statCardWarning : {}),
+          }}>
+            <span style={styles.statIcon}>⏱️</span>
+            <div>
+              <p style={styles.statValue}>{dashboard ? dashboard.ridesOverThresholdCount : '—'}</p>
+              <p style={styles.statLabel}>Rides Over {threshold}-Min Wait</p>
+            </div>
+          </div>
+
+          <label style={styles.thresholdControl}>
+            Threshold (min)
+            <input
+              type="number"
+              min="0"
+              value={threshold}
+              onChange={(event) => setThreshold(Number(event.target.value) || 0)}
+              style={styles.thresholdInput}
+            />
+          </label>
+        </div>
+
+        {dashboard?.ridesOverThreshold?.length > 0 && (
+          <div style={styles.rideList}>
+            <p style={styles.rideListTitle}>Rides currently over threshold:</p>
+            <ul style={styles.rideListItems}>
+              {dashboard.ridesOverThreshold.map((ride) => (
+                <li key={ride._id} style={styles.rideListItem}>
+                  <span>{ride.name}</span>
+                  <span style={styles.rideListWait}>{ride.waitTime} mins</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
           {weather && (
             <div style={{
               background: weather.isAlert ? '#fef3c7' : '#f0fdf4',
@@ -73,7 +146,7 @@ const AdminDashboard = () => {
             { icon: '🎁', label: 'Gift Recommendations', status: 'Sprint 3', color: '#f0f4ff', border: '#93c5fd' },
             { icon: '🏆', label: 'Rewards & Challenges', status: 'Sprint 3', color: '#f0f4ff', border: '#93c5fd' },
             { icon: '🌤️', label: 'Weather Integration', status: 'Sprint 2', color: '#fef9c3', border: '#fde047' },
-            { icon: '📊', label: 'Admin Dashboard', status: 'Sprint 4', color: '#fdf4ff', border: '#d8b4fe' },
+            { icon: '📊', label: 'Admin Dashboard', status: 'Live', color: '#dcfce7', border: '#86efac' },
           ].map((item, i) => (
             <div key={i} style={{ ...styles.featureCard, background: item.color, border: `1.5px solid ${item.border}` }}>
               <span style={styles.featureIcon}>{item.icon}</span>
@@ -113,6 +186,69 @@ const styles = {
   main: { maxWidth: '900px', margin: '2rem auto', padding: '0 1rem' },
   pageTitle: { color: '#1e293b', marginBottom: '0.5rem' },
   subtitle: { color: '#64748b', marginBottom: '1.75rem' },
+  error: {
+    background: '#fef2f2',
+    border: '1px solid #fecaca',
+    color: '#dc2626',
+    padding: '0.8rem 1rem',
+    borderRadius: '8px',
+    marginBottom: '1rem',
+  },
+  statsGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+    gap: '1rem',
+    marginBottom: '1rem',
+  },
+  statCard: {
+    background: '#fff',
+    border: '1.5px solid #e2e8f0',
+    borderRadius: '12px',
+    padding: '1.1rem',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '0.85rem',
+    boxShadow: '0 2px 10px rgba(0,0,0,0.04)',
+  },
+  statCardAlert: { border: '1.5px solid #fca5a5', background: '#fef2f2' },
+  statCardWarning: { border: '1.5px solid #fde047', background: '#fefce8' },
+  statIcon: { fontSize: '1.75rem' },
+  statValue: { margin: 0, fontSize: '1.6rem', fontWeight: 800, color: '#1e293b' },
+  statLabel: { margin: '0.15rem 0 0', color: '#64748b', fontSize: '0.8rem' },
+  thresholdControl: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    gap: '0.4rem',
+    fontSize: '0.8rem',
+    fontWeight: 600,
+    color: '#334155',
+  },
+  thresholdInput: {
+    padding: '0.5rem',
+    border: '1px solid #cbd5e1',
+    borderRadius: '8px',
+    fontSize: '0.9rem',
+    width: '100px',
+  },
+  rideList: {
+    background: '#fff',
+    border: '1.5px solid #fde047',
+    borderRadius: '12px',
+    padding: '1rem 1.4rem',
+    marginBottom: '1.5rem',
+  },
+  rideListTitle: { margin: '0 0 0.5rem', fontWeight: 700, color: '#1e293b', fontSize: '0.9rem' },
+  rideListItems: { listStyle: 'none', margin: 0, padding: 0 },
+  rideListItem: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    padding: '0.4rem 0',
+    borderBottom: '1px solid #f1f5f9',
+    color: '#334155',
+    fontSize: '0.9rem',
+  },
+  rideListWait: { fontWeight: 700, color: '#b45309' },
   grid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',

@@ -66,13 +66,13 @@ const AdminDashboard = () => {
           )}
         <div style={styles.grid}>
           {[
-            { icon: '🎟️', label: 'Entry Ticketing', status: 'Live (Sprint 1)', color: '#dcfce7', border: '#86efac' },
+            { icon: '🎟️', label: 'Entry Ticketing', status: 'Live', color: '#dcfce7', border: '#86efac' },
             { icon: '🗺️', label: 'Park Map', status: 'Sprint 2', color: '#fef9c3', border: '#fde047' },
             { icon: '⏱️', label: 'Queue System', status: 'Sprint 2', color: '#fef9c3', border: '#fde047' },
-            { icon: '🚨', label: 'Lost-Child Alert', status: 'Sprint 3', color: '#f0f4ff', border: '#93c5fd' },
+            { icon: '🚨', label: 'Lost-Child Alert', status: 'Live', color: '#dcfce7', border: '#86efac' },
             { icon: '🎁', label: 'Gift Recommendations', status: 'Sprint 3', color: '#f0f4ff', border: '#93c5fd' },
             { icon: '🏆', label: 'Rewards & Challenges', status: 'Sprint 3', color: '#f0f4ff', border: '#93c5fd' },
-            { icon: '🌤️', label: 'Weather Integration', status: 'Sprint 2', color: '#fef9c3', border: '#fde047' },
+            { icon: '🌤️', label: 'Weather Integration', status: 'Live', color: '#dcfce7', border: '#86efac' },
             { icon: '📊', label: 'Admin Dashboard', status: 'Sprint 4', color: '#fdf4ff', border: '#d8b4fe' },
           ].map((item, i) => (
             <div key={i} style={{ ...styles.featureCard, background: item.color, border: `1.5px solid ${item.border}` }}>

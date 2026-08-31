@@ -66,10 +66,10 @@ const styles = {
   panel: { background: '#fef2f2', border: '2px solid #fca5a5', borderRadius: '14px', padding: '1.25rem', marginBottom: '1.5rem' },
   title: { margin: '0 0 1rem', color: '#991b1b', fontSize: '1.05rem' },
   card: { background: '#fff', borderRadius: '10px', padding: '1rem', marginBottom: '0.75rem' },
-  cardTop: { display: 'flex', gap: '0.85rem', marginBottom: '0.75rem' },
-  photo: { width: '56px', height: '56px', objectFit: 'cover', borderRadius: '8px' },
-  description: { margin: 0, fontWeight: 600, color: '#1e293b' },
-  meta: { margin: '0.3rem 0 0', color: '#64748b', fontSize: '0.8rem' },
+  cardTop: { display: 'flex', gap: '1rem', marginBottom: '0.75rem', alignItems: 'flex-start' },
+  photo: { width: '120px', height: '120px', objectFit: 'cover', borderRadius: '10px', flexShrink: 0, border: '2px solid #fca5a5' },
+  description: { margin: 0, fontWeight: 700, color: '#1e293b', fontSize: '1.05rem' },
+    meta: { margin: '0.3rem 0 0', color: '#64748b', fontSize: '0.8rem' },
   foundBtn: { width: '100%', padding: '0.6rem', background: '#16a34a', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 600 },
 };
 

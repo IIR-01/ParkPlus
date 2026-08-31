@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import LostChildAlertPanel from '../../components/common/LostChildAlertPanel';
+import QrScannerModal from '../../components/common/QrScannerModal';
 import api from '../../utils/api';
 
 const StaffDashboard = () => {
@@ -11,33 +12,38 @@ const StaffDashboard = () => {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [history, setHistory] = useState([]);
+  const [showScanner, setShowScanner] = useState(false);
 
-  const handleValidate = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setResult(null);
-    try {
-      const { data } = await api.post('/tickets/validate', {
-        ticketId: ticketId.trim().toUpperCase(),
-      });
-      setResult({ success: true, ...data });
-      // Add to session history
-      setHistory((prev) => [
-        { ticketId: ticketId.trim().toUpperCase(), success: true, time: new Date(), name: data.ticket?.visitor?.name },
-        ...prev.slice(0, 9), // Keep last 10
-      ]);
-    } catch (err) {
-      const msg = err.response?.data?.message || 'Validation failed';
-      setResult({ success: false, message: msg });
-      setHistory((prev) => [
-        { ticketId: ticketId.trim().toUpperCase(), success: false, time: new Date() },
-        ...prev.slice(0, 9),
-      ]);
-    } finally {
-      setLoading(false);
-      setTicketId('');
-    }
-  };
+const validateTicketId = async (id) => {
+  setLoading(true);
+  setResult(null);
+  try {
+    const { data } = await api.post('/tickets/validate', { ticketId: id });
+    setResult({ success: true, ...data });
+    setHistory((prev) => [
+      { ticketId: id, success: true, time: new Date(), name: data.ticket?.visitor?.name },
+      ...prev.slice(0, 9),
+    ]);
+  } catch (err) {
+    const msg = err.response?.data?.message || 'Validation failed';
+    setResult({ success: false, message: msg });
+    setHistory((prev) => [{ ticketId: id, success: false, time: new Date() }, ...prev.slice(0, 9)]);
+  } finally {
+    setLoading(false);
+    setTicketId('');
+  }
+};
+
+const handleValidate = async (e) => {
+  e.preventDefault();
+  validateTicketId(ticketId.trim().toUpperCase());
+};
+
+const handleScanned = (scannedId) => {
+  setShowScanner(false);
+  setTicketId(scannedId);
+  validateTicketId(scannedId);
+};
 
   const handleLogout = () => {
     logout();
@@ -65,9 +71,14 @@ const StaffDashboard = () => {
           <div>
             <h2 style={styles.sectionTitle}>🚪 Gate Entry Validation</h2>
             <div style={styles.card}>
-              <p style={styles.cardHint}>
-                Enter the Ticket ID shown on the visitor's screen
-              </p>
+              <button type="button" onClick={() => setShowScanner(true)} style={styles.scanBtn}>
+                📷 Scan QR Code
+              </button>
+              <div style={styles.orDivider}>
+                <span style={styles.orLine} />
+                <span>or enter manually</span>
+                <span style={styles.orLine} />
+              </div>
               <form onSubmit={handleValidate}>
                 <input
                   style={styles.ticketInput}
@@ -135,6 +146,9 @@ const StaffDashboard = () => {
           </div>
         </div>
       </main>
+      {showScanner && (
+        <QrScannerModal onScanned={handleScanned} onClose={() => setShowScanner(false)} />
+      )}
     </div>
   );
 };
@@ -182,6 +196,9 @@ const styles = {
     boxShadow: '0 2px 16px rgba(0,0,0,0.07)',
   },
   cardHint: { color: '#64748b', marginBottom: '1.25rem', fontSize: '0.9rem' },
+  scanBtn: { width: '100%', padding: '0.9rem', background: '#1e3a8a', color: '#fff', border: 'none', borderRadius: '10px', fontSize: '1rem', fontWeight: 700, cursor: 'pointer' },
+  orDivider: { display: 'flex', alignItems: 'center', gap: '0.75rem', margin: '1.1rem 0', color: '#94a3b8', fontSize: '0.8rem' },
+  orLine: { flex: 1, height: '1px', background: '#e2e8f0' },
   ticketInput: {
     width: '100%',
     padding: '0.9rem 1rem',

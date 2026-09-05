@@ -58,6 +58,8 @@ app.use('/api/lostchild', require('./routes/lostChildRoutes'));
 // Wishlist routes
 app.use('/api/wishlist', require('./routes/wishlistRoutes'));
 app.use('/api/points', require('./routes/pointsRoutes'));
+// Challenge routes — admin defines challenges, visitors track progress
+app.use('/api/challenges', require('./routes/challengeRoutes'));
 
 // Visitor QR check-in history routes
 app.use('/api/checkins', require('./routes/checkInRoutes'));

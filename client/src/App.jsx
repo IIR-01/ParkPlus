@@ -13,7 +13,9 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import MyPoints from './pages/visitor/MyPoints';
 import LiveWaitTimes from './pages/visitor/LiveWaitTimes';
 import MyReservations from './pages/visitor/MyReservations';
+import MyChallenges from './pages/visitor/MyChallenges';
 import RideWaitManagement from './pages/staff/RideWaitManagement';
+import ChallengeManagement from './pages/admin/ChallengeManagement';
 
 // Protected route wrapper
 import ProtectedRoute from './components/common/ProtectedRoute';
@@ -72,6 +74,16 @@ function App() {
         }
       />
 
+      {/* My challenges feature */}
+      <Route
+        path="/visitor/my-challenges"
+        element={
+          <ProtectedRoute allowedRoles={['visitor']}>
+            <MyChallenges />
+          </ProtectedRoute>
+        }
+      />
+
       {/* Visitor routes */}
       <Route
         path="/visitor/*"
@@ -104,6 +116,16 @@ function App() {
         element={
           <ProtectedRoute allowedRoles={['staff']}>
             <StaffDashboard />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Admin challenges management */}
+      <Route
+        path="/admin/challenges"
+        element={
+          <ProtectedRoute allowedRoles={['admin']}>
+            <ChallengeManagement />
           </ProtectedRoute>
         }
       />

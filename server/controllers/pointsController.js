@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const Activity = require('../models/Activity');
+const { trackProgress } = require('../services/challengeService');
 
 // Point values — tweak these as the team balances gameplay.
 const POINTS = {
@@ -35,6 +36,8 @@ const checkInZone = async (req, res) => {
       { $inc: { points } },
       { new: true }
     ).select('points');
+
+    await trackProgress(req.user._id, 'zone_checkin', points);
 
     res.status(201).json({
       message: `+${points} points for checking in to ${zoneName}`,
@@ -75,6 +78,8 @@ const completeRide = async (req, res) => {
       { $inc: { points } },
       { new: true }
     ).select('points');
+
+    await trackProgress(req.user._id, 'ride_completed', points);
 
     res.status(201).json({
       message: `+${points} points for completing ${rideName}`,

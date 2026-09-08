@@ -9,11 +9,7 @@ const ActivitySchema = new mongoose.Schema(
     },
     type: {
       type: String,
-<<<<<<< HEAD
       enum: ['zone_checkin', 'ride_completed'],
-=======
-      enum: ['zone_checkin', 'ride_completed', 'challenge_completed'],
->>>>>>> 8e45407319e716fb3ba1aaa6c50bc2f05090b49d
       required: true,
     },
     refName: {

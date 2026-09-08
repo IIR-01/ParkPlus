@@ -5,6 +5,10 @@ import api from '../../utils/api';
 const ACTIVITY_LABELS = {
   zone_checkin: { icon: '📍', label: 'Zone check-in' },
   ride_completed: { icon: '🎢', label: 'Ride completed' },
+<<<<<<< HEAD
+=======
+  challenge_completed: { icon: '🏆', label: 'Challenge completed' },
+>>>>>>> 8e45407319e716fb3ba1aaa6c50bc2f05090b49d
 };
 
 const MyPoints = () => {

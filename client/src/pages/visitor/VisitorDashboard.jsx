@@ -14,7 +14,10 @@ const VisitorDashboard = () => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [showLostChildModal, setShowLostChildModal] = useState(false);
+<<<<<<< HEAD
   const [groupSize, setGroupSize] = useState(1);
+=======
+>>>>>>> 8e45407319e716fb3ba1aaa6c50bc2f05090b49d
 
   // Fetch visitor's existing ticket on load
   useEffect(() => {
@@ -38,7 +41,11 @@ const VisitorDashboard = () => {
     setError('');
     setMessage('');
     try {
+<<<<<<< HEAD
       const { data } = await api.post('/tickets/generate', { groupSize });
+=======
+      const { data } = await api.post('/tickets/generate');
+>>>>>>> 8e45407319e716fb3ba1aaa6c50bc2f05090b49d
       setTicket(data.ticket);
       setMessage('🎉 Your entry ticket has been generated!');
     } catch (err) {
@@ -80,6 +87,12 @@ const VisitorDashboard = () => {
           <Link to="/visitor/my-reservations" style={styles.pointsLink}>
             📅 My Reservations
           </Link>
+<<<<<<< HEAD
+=======
+          <Link to="/visitor/my-challenges" style={styles.pointsLink}>
+            🏆 Challenges
+          </Link>
+>>>>>>> 8e45407319e716fb3ba1aaa6c50bc2f05090b49d
           <span style={styles.headerUser}>Hello, {user?.name} 👋</span>
           <button onClick={handleLogout} style={styles.logoutBtn}>
             Logout
@@ -106,6 +119,7 @@ const VisitorDashboard = () => {
             <p style={styles.emptyText}>
               Generate your entry ticket to gain access to the park.
             </p>
+<<<<<<< HEAD
 
             <div style={styles.groupSizeRow}>
               <label style={styles.groupSizeLabel} htmlFor="groupSize">
@@ -126,6 +140,8 @@ const VisitorDashboard = () => {
               </select>
             </div>
 
+=======
+>>>>>>> 8e45407319e716fb3ba1aaa6c50bc2f05090b49d
             <button
               onClick={handleGenerateTicket}
               disabled={generating}
@@ -168,10 +184,13 @@ const VisitorDashboard = () => {
                   <span style={styles.infoLabel}>Name</span>
                   <span>{user?.name}</span>
                 </div>
+<<<<<<< HEAD
                 <div style={styles.infoRow}>
                   <span style={styles.infoLabel}>Group Size</span>
                   <span>{ticket.groupSize || 1} {(ticket.groupSize || 1) === 1 ? 'person' : 'people'}</span>
                 </div>
+=======
+>>>>>>> 8e45407319e716fb3ba1aaa6c50bc2f05090b49d
                 {ticket.isUsed && (
                   <div style={styles.infoRow}>
                     <span style={styles.infoLabel}>Entry Time</span>
@@ -268,6 +287,7 @@ const styles = {
   emptyIcon: { fontSize: '4rem', marginBottom: '1rem' },
   emptyTitle: { color: '#1e293b', marginBottom: '0.5rem' },
   emptyText: { color: '#64748b', marginBottom: '2rem' },
+<<<<<<< HEAD
   groupSizeRow: { marginBottom: '1.25rem' },
   groupSizeLabel: { display: 'block', marginBottom: '0.5rem', fontWeight: 600 },
   groupSizeHint: { color: '#94a3b8', fontSize: '0.875rem', marginBottom: '0.5rem' },
@@ -278,6 +298,8 @@ const styles = {
     background: '#fff',
     fontSize: '1rem',
   },
+=======
+>>>>>>> 8e45407319e716fb3ba1aaa6c50bc2f05090b49d
   generateBtn: {
     background: '#2563eb',
     color: '#fff',

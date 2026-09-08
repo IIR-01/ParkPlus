@@ -71,11 +71,28 @@ const AdminDashboard = () => {
             { icon: '⏱️', label: 'Queue System', status: 'Sprint 2', color: '#fef9c3', border: '#fde047' },
             { icon: '🚨', label: 'Lost-Child Alert', status: 'Live', color: '#dcfce7', border: '#86efac' },
             { icon: '🎁', label: 'Gift Recommendations', status: 'Sprint 3', color: '#f0f4ff', border: '#93c5fd' },
+<<<<<<< HEAD
             { icon: '🏆', label: 'Rewards & Challenges', status: 'Sprint 3', color: '#f0f4ff', border: '#93c5fd' },
             { icon: '🌤️', label: 'Weather Integration', status: 'Live', color: '#dcfce7', border: '#86efac' },
             { icon: '📊', label: 'Admin Dashboard', status: 'Sprint 4', color: '#fdf4ff', border: '#d8b4fe' },
           ].map((item, i) => (
             <div key={i} style={{ ...styles.featureCard, background: item.color, border: `1.5px solid ${item.border}` }}>
+=======
+            { icon: '🏆', label: 'Rewards & Challenges', status: 'Live', color: '#dcfce7', border: '#86efac', to: '/admin/challenges' },
+            { icon: '🌤️', label: 'Weather Integration', status: 'Live', color: '#dcfce7', border: '#86efac' },
+            { icon: '📊', label: 'Admin Dashboard', status: 'Sprint 4', color: '#fdf4ff', border: '#d8b4fe' },
+          ].map((item, i) => (
+            <div
+              key={i}
+              onClick={item.to ? () => navigate(item.to) : undefined}
+              style={{
+                ...styles.featureCard,
+                background: item.color,
+                border: `1.5px solid ${item.border}`,
+                cursor: item.to ? 'pointer' : 'default',
+              }}
+            >
+>>>>>>> 8e45407319e716fb3ba1aaa6c50bc2f05090b49d
               <span style={styles.featureIcon}>{item.icon}</span>
               <div>
                 <p style={styles.featureName}>{item.label}</p>

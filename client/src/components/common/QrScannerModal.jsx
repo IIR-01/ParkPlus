@@ -5,12 +5,16 @@ const READER_ID = 'qr-reader-region';
 
 const QrScannerModal = ({ onScanned, onClose }) => {
   const scannerRef = useRef(null);
+<<<<<<< HEAD
   const startedRef = useRef(false);
+=======
+>>>>>>> 8e45407319e716fb3ba1aaa6c50bc2f05090b49d
   const [error, setError] = useState('');
   const [starting, setStarting] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
+<<<<<<< HEAD
 
     const boot = async () => {
       if (startedRef.current) return;
@@ -32,19 +36,44 @@ const QrScannerModal = ({ onScanned, onClose }) => {
         );
         if (!cancelled) setStarting(false);
       } catch (err) {
+=======
+    const html5QrCode = new Html5Qrcode(READER_ID);
+    scannerRef.current = html5QrCode;
+
+    html5QrCode
+      .start(
+        { facingMode: 'environment' },
+        { fps: 10, qrbox: { width: 240, height: 240 } },
+        (decodedText) => {
+          if (!cancelled) {
+            onScanned(decodedText.trim().toUpperCase());
+          }
+        },
+        () => {}
+      )
+      .then(() => {
+        if (!cancelled) setStarting(false);
+      })
+      .catch(() => {
+>>>>>>> 8e45407319e716fb3ba1aaa6c50bc2f05090b49d
         if (!cancelled) {
           setStarting(false);
           setError('Could not access the camera. Please allow camera permission, or use manual entry instead.');
         }
+<<<<<<< HEAD
         startedRef.current = false;
       }
     };
 
     boot();
+=======
+      });
+>>>>>>> 8e45407319e716fb3ba1aaa6c50bc2f05090b49d
 
     return () => {
       cancelled = true;
       const instance = scannerRef.current;
+<<<<<<< HEAD
       if (instance && instance.getState && instance.getState() === 2) {
         instance
           .stop()
@@ -55,6 +84,10 @@ const QrScannerModal = ({ onScanned, onClose }) => {
           });
       } else {
         startedRef.current = false;
+=======
+      if (instance) {
+        instance.stop().then(() => instance.clear()).catch(() => {});
+>>>>>>> 8e45407319e716fb3ba1aaa6c50bc2f05090b49d
       }
     };
   }, [onScanned]);

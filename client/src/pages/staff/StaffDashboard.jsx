@@ -108,6 +108,7 @@ const handleScanned = (scannedId) => {
                 <p style={styles.resultMsg}>{result.message}</p>
                 {result.success && result.ticket && (
                   <div style={styles.resultDetails}>
+<<<<<<< HEAD
                     {(result.ticket.groupSize || 1) > 1 && (
                       <div style={styles.groupSizeCallout}>
                         👥 Let <strong>{result.ticket.groupSize}</strong> people through on this ticket
@@ -116,6 +117,10 @@ const handleScanned = (scannedId) => {
                     <p><strong>Visitor:</strong> {result.ticket.visitor?.name}</p>
                     <p><strong>Email:</strong> {result.ticket.visitor?.email}</p>
                     <p><strong>Group Size:</strong> {result.ticket.groupSize || 1}</p>
+=======
+                    <p><strong>Visitor:</strong> {result.ticket.visitor?.name}</p>
+                    <p><strong>Email:</strong> {result.ticket.visitor?.email}</p>
+>>>>>>> 8e45407319e716fb3ba1aaa6c50bc2f05090b49d
                     <p><strong>Entry Time:</strong> {new Date(result.ticket.entryTimestamp).toLocaleTimeString()}</p>
                     <p><strong>Ticket ID:</strong> <span style={{ fontFamily: 'monospace' }}>{result.ticket.ticketId}</span></p>
                   </div>
@@ -245,7 +250,10 @@ const styles = {
   },
   resultTitle: { margin: '0 0 0.5rem', fontSize: '1.1rem' },
   resultMsg: { color: '#475569', margin: '0 0 0.75rem' },
+<<<<<<< HEAD
   groupSizeCallout: { background: '#dbeafe', border: '1.5px solid #93c5fd', borderRadius: '8px', padding: '0.6rem 0.9rem', marginBottom: '0.75rem', fontSize: '0.95rem', color: '#1e3a8a' },
+=======
+>>>>>>> 8e45407319e716fb3ba1aaa6c50bc2f05090b49d
   resultDetails: {
     borderTop: '1px solid #d1fae5',
     paddingTop: '0.75rem',

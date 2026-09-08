@@ -27,6 +27,12 @@ const TicketSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
+    groupSize: {
+      type: Number,
+      default: 1,
+      min: [1, 'At least 1 person must be entering'],
+      max: [10, 'For groups larger than 10, please generate a second ticket'],
+    },
   },
   { timestamps: true }
 );

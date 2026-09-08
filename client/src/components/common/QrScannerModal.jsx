@@ -5,40 +5,56 @@ const READER_ID = 'qr-reader-region';
 
 const QrScannerModal = ({ onScanned, onClose }) => {
   const scannerRef = useRef(null);
+  const startedRef = useRef(false);
   const [error, setError] = useState('');
   const [starting, setStarting] = useState(true);
 
   useEffect(() => {
     let cancelled = false;
-    const html5QrCode = new Html5Qrcode(READER_ID);
-    scannerRef.current = html5QrCode;
 
-    html5QrCode
-      .start(
-        { facingMode: 'environment' },
-        { fps: 10, qrbox: { width: 240, height: 240 } },
-        (decodedText) => {
-          if (!cancelled) {
-            onScanned(decodedText.trim().toUpperCase());
-          }
-        },
-        () => {}
-      )
-      .then(() => {
+    const boot = async () => {
+      if (startedRef.current) return;
+      startedRef.current = true;
+
+      const html5QrCode = new Html5Qrcode(READER_ID);
+      scannerRef.current = html5QrCode;
+
+      try {
+        await html5QrCode.start(
+          { facingMode: 'environment' },
+          { fps: 10, qrbox: { width: 240, height: 240 } },
+          (decodedText) => {
+            if (!cancelled) {
+              onScanned(decodedText.trim().toUpperCase());
+            }
+          },
+          () => {}
+        );
         if (!cancelled) setStarting(false);
-      })
-      .catch(() => {
+      } catch (err) {
         if (!cancelled) {
           setStarting(false);
           setError('Could not access the camera. Please allow camera permission, or use manual entry instead.');
         }
-      });
+        startedRef.current = false;
+      }
+    };
+
+    boot();
 
     return () => {
       cancelled = true;
       const instance = scannerRef.current;
-      if (instance) {
-        instance.stop().then(() => instance.clear()).catch(() => {});
+      if (instance && instance.getState && instance.getState() === 2) {
+        instance
+          .stop()
+          .then(() => instance.clear())
+          .catch(() => {})
+          .finally(() => {
+            startedRef.current = false;
+          });
+      } else {
+        startedRef.current = false;
       }
     };
   }, [onScanned]);

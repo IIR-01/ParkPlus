@@ -5,6 +5,7 @@ import { useAuth } from './context/AuthContext';
 // Auth pages
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
+import Unauthorized from './pages/auth/Unauthorized';
 
 // Role-specific pages
 import VisitorDashboard from './pages/visitor/VisitorDashboard';
@@ -28,6 +29,7 @@ function App() {
       <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/unauthorized" element={<Unauthorized />} />
 
       {/* My visitor map feature */}
       <Route

@@ -14,6 +14,7 @@ const VisitorDashboard = () => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [showLostChildModal, setShowLostChildModal] = useState(false);
+  const [groupSize, setGroupSize] = useState(1);
 
   // Fetch visitor's existing ticket on load
   useEffect(() => {
@@ -37,7 +38,7 @@ const VisitorDashboard = () => {
     setError('');
     setMessage('');
     try {
-      const { data } = await api.post('/tickets/generate');
+      const { data } = await api.post('/tickets/generate', { groupSize });
       setTicket(data.ticket);
       setMessage('🎉 Your entry ticket has been generated!');
     } catch (err) {
@@ -105,6 +106,26 @@ const VisitorDashboard = () => {
             <p style={styles.emptyText}>
               Generate your entry ticket to gain access to the park.
             </p>
+
+            <div style={styles.groupSizeRow}>
+              <label style={styles.groupSizeLabel} htmlFor="groupSize">
+                How many people are entering with this ticket?
+              </label>
+              <p style={styles.groupSizeHint}>
+                Include anyone without their own phone — children, elderly guests, etc.
+              </p>
+              <select
+                id="groupSize"
+                value={groupSize}
+                onChange={(e) => setGroupSize(Number(e.target.value))}
+                style={styles.groupSizeSelect}
+              >
+                {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (
+                  <option key={n} value={n}>{n} {n === 1 ? 'person' : 'people'}</option>
+                ))}
+              </select>
+            </div>
+
             <button
               onClick={handleGenerateTicket}
               disabled={generating}
@@ -146,6 +167,10 @@ const VisitorDashboard = () => {
                 <div style={styles.infoRow}>
                   <span style={styles.infoLabel}>Name</span>
                   <span>{user?.name}</span>
+                </div>
+                <div style={styles.infoRow}>
+                  <span style={styles.infoLabel}>Group Size</span>
+                  <span>{ticket.groupSize || 1} {(ticket.groupSize || 1) === 1 ? 'person' : 'people'}</span>
                 </div>
                 {ticket.isUsed && (
                   <div style={styles.infoRow}>
@@ -243,6 +268,16 @@ const styles = {
   emptyIcon: { fontSize: '4rem', marginBottom: '1rem' },
   emptyTitle: { color: '#1e293b', marginBottom: '0.5rem' },
   emptyText: { color: '#64748b', marginBottom: '2rem' },
+  groupSizeRow: { marginBottom: '1.25rem' },
+  groupSizeLabel: { display: 'block', marginBottom: '0.5rem', fontWeight: 600 },
+  groupSizeHint: { color: '#94a3b8', fontSize: '0.875rem', marginBottom: '0.5rem' },
+  groupSizeSelect: {
+    padding: '0.5rem',
+    borderRadius: '8px',
+    border: '1px solid #cbd5e1',
+    background: '#fff',
+    fontSize: '1rem',
+  },
   generateBtn: {
     background: '#2563eb',
     color: '#fff',

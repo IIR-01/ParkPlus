@@ -25,6 +25,14 @@ const getTodayRange = () => {
 const generateTicket = async (req, res) => {
   try {
     const { start, end } = getTodayRange();
+    const parsedGroupSize = parseInt(req.body?.groupSize, 10);
+    const groupSize = Number.isNaN(parsedGroupSize) ? 1 : parsedGroupSize;
+
+    if (groupSize < 1 || groupSize > 10) {
+      return res.status(400).json({
+        message: 'Group size must be between 1 and 10. For larger groups, please generate a second ticket.',
+      });
+    }
 
     // F3 — Block if visitor already has a ticket for today
     const existingTicket = await Ticket.findOne({
@@ -59,6 +67,7 @@ const generateTicket = async (req, res) => {
       qrCode,
       validDate: new Date(),
       isUsed: false,
+      groupSize,
     });
 
     res.status(201).json({

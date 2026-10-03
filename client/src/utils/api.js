@@ -1,12 +1,14 @@
 import axios from 'axios';
 
-// Create a custom axios instance with default settings
 const api = axios.create({
-  baseURL: '/api',  // All requests go to /api/...
+  baseURL: typeof window !== 'undefined' && window.location.hostname.includes('vercel.app')
+    ? 'https://park-plus-1gxx.vercel.app/api' 
+    : 'http://localhost:5000/api',
   headers: {
     'Content-Type': 'application/json',
   },
 });
+
 
 // Automatically attach the JWT token to every request
 api.interceptors.request.use(
